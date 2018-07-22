@@ -4,7 +4,7 @@
 PROJECT_METADATA = {
     'title': 'NER-Annotator',
     'author': 'Peter Andorfer',
-    'subtitle': 'A web app to check NER-Annotation',
+    'subtitle': 'A web app to check NER-Annotations',
     'description': 'This app should ease the process of creating gold standards for Named Entities',
     'github': 'https://github.com/acdh-oeaw/annotator',
     'purpose_de': 'Eine Web Applikation zur Erstellung von Goldstandards für Named Entities.',

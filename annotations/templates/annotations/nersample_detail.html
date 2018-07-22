@@ -3,14 +3,16 @@
 {% block Title %}NerSample{% endblock %}
 
 {% block scriptHeader %}
-
-
-
-{% endblock %}
+    {{block.super}}
+    <script type="text/javascript" src="{% static 'webpage/libraries/csrf.js' %}"></script>
+{% endblock scriptHeader %}
 
 {% block content %}
 
 <div class="container">
+    {% if object.entity_checked %}
+        <h1>CHECKED</h1>
+    {% endif %}
     <div class="card procustom-panel-create">
         <div class="card-header procustom-panel-heading">
             <div class="row">
@@ -78,6 +80,7 @@
                                             <option value="{{ x.ent }}" selected>{{ x.ent }}</option>
                                             <option value="PER">PER</option>
                                             <option value="LOC">LOC</option>
+                                            <option value="ORG">ORG</option>
                                             <option value="MISC">MISC</option>
                                             <option value="FALSE">FALSE</option>
                                         </select>
@@ -90,11 +93,20 @@
                 </form>
             </div>
         </div>
-        <div>
-            <legend>
-                annotations
-            </legend>
-            {{ object.entity_json|safe }}
+        <div class="row">
+            <div class="col-md-6">
+                <legend>
+                    spacy
+                </legend>
+                {{ object.entity_json|safe }}
+            </div>
+            <div class="col-md-6">
+                <legend>
+                    checked
+                </legend>
+                {{ object.entity_checked|safe }}
+            </div>
+
         </div>
 
         <!--change history collapse button-->
@@ -144,11 +156,31 @@
             if (element[2] != 'FALSE') {
                 final.entities.push(element)
             }
-            console.log(element[2]);
         });
-        console.log(final);
 
+        {% if object.get_next %}
+            var next_url = "{% url 'annotations:nersample_detail' pk=object.get_next %}"
+        {% else %}
+            var next_url = false;
+        {% endif %}
+
+        $.ajax({
+            url: "{{ object.get_api_url}}",
+            type: 'PUT',
+            data: JSON.stringify({entity_checked: final}),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            success: function(data) {
+                if (next_url) {
+                    window.location.href = next_url
+                }
+                else {
+                    alert('you reached the final annotation')
+                }
+            }
+        });
     });
-
 </script>
 {% endblock %}

@@ -41,8 +41,15 @@ INSTALLED_APPS = [
 CRISPY_TEMPLATE_PACK = "bootstrap3"
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticatedOrReadOnly',),
+    'PAGE_SIZE': 10,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
 }
+
+CSRF_USE_SESSIONS = False
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

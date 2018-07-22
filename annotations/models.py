@@ -45,6 +45,11 @@ class NerSample(models.Model):
             'annotations:nersample_detail', kwargs={'pk': self.id}
         )
 
+    def get_api_url(self):
+        return reverse(
+            'nersample-detail', kwargs={'pk': self.id}
+        )
+
     @classmethod
     def get_listview_url(self):
         return reverse('annotations:browse_nersamples')
@@ -84,13 +89,13 @@ class NerSample(models.Model):
                 an_dict["annotated"] = "".join([start, markup, end])
                 sents.append(an_dict)
         else:
-            sents = [
+            sents.append(
                 {
                     "sent": self.text,
                     "start": None,
                     "end": None,
-                    "ent": None,
-                    "annotated": None
+                    "ent": "FALSE",
+                    "annotated": self.text
                 }
-            ]
+            )
         return sents

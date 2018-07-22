@@ -21,6 +21,7 @@ class NerSampleListView(GenericListView):
     init_columns = [
         'id',
         'text',
+        'entity_checked',
     ]
 
 

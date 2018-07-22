@@ -71,12 +71,26 @@ class NerSample(models.Model):
         text = self.text
         if self.entity_json['entities']:
             for x in self.entity_json['entities']:
+                an_dict = {
+                    "sent": self.text,
+                    "start": x[0],
+                    "end": x[1],
+                    "ent": x[2]
+                }
                 sl = text[x[0]:x[1]]
                 markup = tag.format(TAG_COLORS[x[2]], sl, x[2])
                 start = text[:x[0]]
                 end = text[x[1]:]
-                annotated = "".join([start, markup, end])
-                sents.append(annotated)
+                an_dict["annotated"] = "".join([start, markup, end])
+                sents.append(an_dict)
         else:
-            sents = [self.text]
+            sents = [
+                {
+                    "sent": self.text,
+                    "start": None,
+                    "end": None,
+                    "ent": None,
+                    "annotated": None
+                }
+            ]
         return sents

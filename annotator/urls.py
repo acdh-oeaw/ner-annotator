@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^admin/', admin.site.urls),
     url(r'^', include('webpage.urls', namespace='webpage')),
+    url(r'^annotations/', include('annotations.urls', namespace='annotations'))
 ]
 
 if 'bib' in settings.INSTALLED_APPS:

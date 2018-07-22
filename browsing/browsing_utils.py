@@ -1,18 +1,30 @@
 import datetime
+import django_tables2
 import time
 import pandas as pd
 import django_filters
+
 from django.conf import settings
 from django.http import HttpResponse
 from django.views.generic.edit import CreateView, UpdateView
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset, Div, MultiField, HTML
-from django_tables2 import SingleTableView, RequestConfig
 from . models import BrowsConf
 
-if 'bib' in settings.INSTALLED_APPS:
+if 'charts' in settings.INSTALLED_APPS:
     from charts.models import ChartConfig
     from charts.views import create_payload
+
+
+def get_entities_table(model_class):
+
+    class GenericEntitiesTable(django_tables2.Table):
+        id = django_tables2.LinkColumn(None)
+
+        class Meta:
+            model = model_class
+            attrs = {"class": "table table-hover table-striped table-condensed"}
+    return GenericEntitiesTable
 
 
 class GenericFilterFormHelper(FormHelper):
@@ -43,7 +55,7 @@ django_filters.filters.LOOKUP_TYPES = [
 ]
 
 
-class GenericListView(SingleTableView):
+class GenericListView(django_tables2.SingleTableView):
     filter_class = None
     formhelper_class = None
     context_filter_name = 'filter'
@@ -51,8 +63,20 @@ class GenericListView(SingleTableView):
     template_name = 'browsing/generic_list.html'
     init_columns = []
 
+    def get_table_class(self):
+        if self.table_class:
+            return self.table_class
+        else:
+            return get_entities_table(self.model)
+
+        raise ImproperlyConfigured(
+            "You must either specify {0}.table_class or {0}.model".format(type(self).__name__)
+        )
+
     def get_all_cols(self):
-        all_cols = list(self.table_class.base_columns.keys())
+        print('get_table')
+        print(self.get_table().base_columns.keys())
+        all_cols = list(self.get_table().base_columns.keys())
         return all_cols
 
     def get_queryset(self, **kwargs):
@@ -63,10 +87,8 @@ class GenericListView(SingleTableView):
 
     def get_table(self, **kwargs):
         table = super(GenericListView, self).get_table()
-        RequestConfig(self.request, paginate={
-            'page': 1, 'per_page': self.paginate_by}).configure(table)
         default_cols = self.init_columns
-        all_cols = self.get_all_cols()
+        all_cols = table.base_columns.keys()
         selected_cols = self.request.GET.getlist("columns") + default_cols
         exclude_vals = [x for x in all_cols if x not in selected_cols]
         table.exclude = exclude_vals
@@ -104,7 +126,7 @@ class GenericListView(SingleTableView):
             .values_list('field_path', 'label')
         )
         print(context['conf_items'])
-        if 'bib' in settings.INSTALLED_APPS:
+        if 'charts' in settings.INSTALLED_APPS:
             context['vis_list'] = ChartConfig.objects.filter(model_name=model_name)
             context['property_name'] = self.request.GET.get('property')
             context['charttype'] = self.request.GET.get('charttype')
@@ -136,7 +158,9 @@ class GenericListView(SingleTableView):
                         columns=[x[1] for x in conf_items]
                     )
                 except AssertionError:
-                    response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(filename)
+                    response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(
+                        filename
+                    )
                     return response
             else:
                 response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(filename)

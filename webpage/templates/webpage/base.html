@@ -24,6 +24,8 @@
     <!-- custom css -->
     <link rel="stylesheet" href="{% static 'webpage/css/style.css' %}" />
     <link href="https://fonts.googleapis.com/css?family=Libre+Franklin:400,500" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet" />
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" />
     <!-- custom less -->
     <link rel="stylesheet/less" type="text/css" href="{% static 'webpage/css/style.less' %}" />
     <!--scroll to top CSS -->
@@ -99,7 +101,7 @@
                         </a>
                         {% endif %}
                         <div class="dropdown-menu">
-                            {% nav_menu app='entities' as links %}
+                            {% nav_menu app='annotations' as links %}
                             {% for x in links %}
 
                                     <a class="dropdown-item" href="{{ x.link}}">{{ x.name }}</a>

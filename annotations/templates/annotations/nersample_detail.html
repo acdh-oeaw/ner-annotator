@@ -1,0 +1,97 @@
+{% extends "webpage/base.html" %}
+{% load staticfiles %}
+{% block Title %}NerSample{% endblock %}
+
+{% block scriptHeader %}
+
+
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card procustom-panel-create">
+        <div class="card-header procustom-panel-heading">
+            <div class="row">
+                <div class="col-md-2">
+                    {% if object.get_prev %}
+                    <h2>
+                        <a href="{% url 'annotations:nersample_detail' pk=object.get_prev %}">
+                            <i class="fas fa-chevron-left" title="previous"></i>
+                        </a>
+                    </h2>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <h1 style="text-align: center;">
+                        <small>{{ object.text|truncatechars:30 }}
+                        {% if user.is_authenticated %}
+                        <small>
+                        <a href="{% url 'annotations:nersample_edit' pk=object.id %}">
+                            <i class="far fa-edit" title="edit"></i>
+                        </a>
+                        </small>
+                        |
+                        <small>
+                        <a href="{% url 'annotations:nersample_delete' pk=object.id %}">
+                            <i class="far fa-trash-alt" title="delete"></i>
+                            </a>
+                        </small>
+                    {% endif %}
+                </h1>
+            </div>
+            <div class="col-md-2">
+                <h2>
+                    {% if object.get_next %}
+                    <a href="{% url 'annotations:nersample_detail' pk=object.get_next %}" style="float:right">
+                        <i class="fas fa-chevron-right" title="next"></i>
+                    </a>
+                </h2>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="card-body" style="text-align: center">
+        <div class="row">
+            <div class="col-md-12">
+                {% for x in object.make_html_samples %}
+                    <div class="row">
+                        <div class="col-md-8">
+                            {{ x|safe }}
+                        </div>
+                        <hr />
+                        <div class="col-md-4">
+                            <button type="button" class="btn btn-primary">PER</button>
+                            <button type="button" class="btn btn-secondary">LOC</button>
+                            <button type="button" class="btn btn-success">ORG</button>
+                            <button type="button" class="btn btn-info">MISC</button>
+                            <button type="button" class="btn btn-danger">FALSE</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!--change history collapse button-->
+        {% if user.is_authenticated %}
+        {% if history %}
+        <button class="btn btn-outline-info" type="button" data-toggle="collapse" data-target="#changeHistory" aria-expanded="false" aria-controls="changeHistory">
+        Change history
+        </button>
+        <div class="collapse" id="changeHistory">
+            <div class="card card-body">
+                   {% for x in history %}
+                    <li>
+                   {{ x.revision.date_created }} changed by {{ x.revision.user }}
+                   </li>
+                   {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+        <!--change history ends here-->
+    </div>
+</div>
+</div>
+{% endblock %}

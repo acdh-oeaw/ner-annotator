@@ -3,15 +3,37 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import DeleteView, FormView
 
 from reversion.models import Version
 
 from browsing.browsing_utils import GenericListView, BaseCreateView, BaseUpdateView
 
 from . models import NerSample
-from . forms import NerSampleForm, NerSampleFilterFormHelper
+from . forms import NerSampleForm, NerSampleFilterFormHelper, UploadFileForm
 from . filters import NerSampleListFilter
+from . utils import create_ner_samples_from_csv
+
+
+@method_decorator(login_required, name="dispatch")
+class UploadNerSamplesView(FormView):
+    template_name = 'annotations/import_ner_samples.html'
+    form_class = UploadFileForm
+    success_url = '.'
+
+    def get_context_data(self, **kwargs):
+        context = super(UploadNerSamplesView, self).get_context_data()
+        context['ner_before'] = NerSample.objects.all().count()
+        return context
+
+    def form_valid(self, form, **kwargs):
+        context = super(UploadNerSamplesView, self).get_context_data(**kwargs)
+        context['ner_before'] = NerSample.objects.all().count()
+        cd = form.cleaned_data
+        file = cd['file']
+        create_ner_samples_from_csv(file)
+        context['ner_after'] = NerSample.objects.all().count()
+        return render(self.request, self.template_name, context)
 
 
 class NerSampleListView(GenericListView):

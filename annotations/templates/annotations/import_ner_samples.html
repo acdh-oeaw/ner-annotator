@@ -1,0 +1,24 @@
+{% extends "webpage/base.html" %}
+{% block title %} Upload NER-Samples {% endblock %}
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+<div class="container">
+<div class="card procustom-panel-create">
+    <div class="card-header procustom-panel-heading" style="text-align: center;">
+            <h1>Upload NER-Samples</h1>
+            <h4>NerSamples before upload: {{ ner_before }}</h4>
+        </div>
+        <div class="card-body">
+            {% crispy form %}
+        </div>
+        {% if ner_after %}
+            <div class="card-footer" style="text-align: center;">
+                <h4>NerSamples after upload: {{ ner_after }}</h4>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock content %}

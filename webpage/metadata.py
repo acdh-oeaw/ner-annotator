@@ -10,6 +10,6 @@ PROJECT_METADATA = {
     'purpose_de': 'Eine Web Applikation zur Erstellung von Goldstandards für Named Entities.',
     'purpose_en': 'This app should ease the process of creating gold standards for Named Entities.',
     'version': '0.0.1',
-    'matomo_id': '1',
+    'matomo_id': '91',
     'matomo_url': '//piwik.apollo.arz.oeaw.ac.at/'
 }

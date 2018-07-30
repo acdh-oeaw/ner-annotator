@@ -36,6 +36,24 @@ class UploadNerSamplesView(FormView):
         return render(self.request, self.template_name, context)
 
 
+class NerSampleToDoListView(GenericListView):
+    model = NerSample
+    filter_class = NerSampleListFilter
+    formhelper_class = NerSampleFilterFormHelper
+    init_columns = [
+        'id',
+        'text',
+        'entity_checked',
+    ]
+
+    def get_queryset(self, **kwargs):
+        qs = super(NerSampleToDoListView, self).get_queryset()
+        qs = qs.filter(entity_checked__isnull=True)
+        self.filter = self.filter_class(self.request.GET, queryset=qs)
+        self.filter.form.helper = self.formhelper_class()
+        return self.filter.qs
+
+
 class NerSampleListView(GenericListView):
     model = NerSample
     filter_class = NerSampleListFilter
@@ -54,6 +72,7 @@ class NerSampleDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(NerSampleDetailView, self).get_context_data(**kwargs)
         context['history'] = Version.objects.get_for_object(self.object)
+        context['next_filtered'] = self.object.get_next(filtered=True)
         return context
 
 

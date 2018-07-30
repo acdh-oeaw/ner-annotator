@@ -46,11 +46,11 @@
             <div class="col-md-2">
                 <h2>
                     {% if object.get_next %}
-                    <a href="{% url 'annotations:nersample_detail' pk=object.get_next %}" style="float:right">
-                        <i class="fas fa-chevron-right" title="next"></i>
-                    </a>
+                        <a href="{% url 'annotations:nersample_detail' pk=object.get_next %}" style="float:right">
+                            <i class="fas fa-chevron-right" title="next"></i>
+                        </a>
+                    {% endif %}
                 </h2>
-                {% endif %}
             </div>
         </div>
     </div>
@@ -159,7 +159,7 @@
         });
 
         {% if object.get_next %}
-            var next_url = "{% url 'annotations:nersample_detail' pk=object.get_next %}"
+            var next_url = "{% url 'annotations:nersample_detail' pk=next_filtered %}"
         {% else %}
             var next_url = false;
         {% endif %}

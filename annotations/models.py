@@ -37,6 +37,9 @@ class NerSample(models.Model):
         help_text="Corrected Annotation"
     )
 
+    class Meta:
+        ordering = ['id']
+
     def __str__(self):
         return self.text
 
@@ -58,13 +61,17 @@ class NerSample(models.Model):
     def get_createview_url(self):
         return reverse('annotations:nersample_create')
 
-    def get_next(self):
-        next = self.__class__.objects.filter(id__gt=self.id)
+    def get_next(self, filtered=False):
+        if filtered:
+            qs = self.__class__.objects.filter(entity_checked__isnull=True)
+            next = qs.filter(id__gt=self.id)
+        else:
+            next = self.__class__.objects.filter(id__gt=self.id)
         if next:
             return next.first().id
         return False
 
-    def get_prev(self):
+    def get_prev(self, filtered=False):
         prev = self.__class__.objects.filter(id__lt=self.id).order_by('-id')
         if prev:
             return prev.first().id

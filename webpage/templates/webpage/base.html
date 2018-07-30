@@ -101,6 +101,7 @@
                         </a>
                         {% endif %}
                         <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{% url 'annotations:browse_nersamples_todo' %}">please check me!</a>
                             {% nav_menu app='annotations' as links %}
                             {% for x in links %}
 

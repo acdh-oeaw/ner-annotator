@@ -12,3 +12,11 @@ def create_ner_samples_from_csv(file):
             ner = NerSample.objects.get_or_create(
                 text=row['0'], entity_json=row['dict']
             )
+
+
+def create_ner_samples_from_list(ner_list, limit=10):
+    for row in ner_list:
+        if len(row[0]) > limit:
+            ner = NerSample.objects.get_or_create(
+                text=row[0], entity_json=row[1]
+            )

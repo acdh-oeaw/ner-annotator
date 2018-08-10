@@ -55,13 +55,15 @@
         </div>
     </div>
     <div class="card-body" style="text-align: center">
+        <div id="show_offset"/>
         <div class="row">
             <div class="col-md-12">
                 <form id="annos">
                     {% for x in object.make_html_samples %}
                         <div class="row">
                             <div class="col-md-8">
-                                {{ x.annotated|safe }}
+                                {{ x.annotated|safe }} <br />
+                                <code id="new_offset-{{ forloop.counter0 }}">{{ object.text }}</code>
                             </div>
 
                             <div class="col-md-4">
@@ -91,6 +93,7 @@
                     {% endfor %}
                     <input type="submit" name="status" value="correct" class="btn btn-success"></input>
                 </form>
+
             </div>
         </div>
         <div class="row">
@@ -130,6 +133,19 @@
     </div>
 </div>
 </div>
+<script>
+    $('code').mouseup(function() {
+      var new_entity = getSelectedText();
+    });
+    function getSelectedText() {
+        var selObj = document.getSelection();
+        entity = selObj.toString();
+        start_char = selObj.anchorOffset;
+        end_char = selObj.focusOffset;
+        console.log(start_char, end_char);
+        $('<strong>start: '+start_char+' end: '+end_char+'</strong>').appendTo('#show_offset');
+    }
+</script>
 <script>
 
     var myForm = document.getElementById('annos');

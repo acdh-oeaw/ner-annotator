@@ -186,12 +186,18 @@
 <footer>
     <div class="container">
         <div class="row text-center">
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <a href="https://www.oeaw.ac.at/acdh/" class="navlink" target="_blank">
                     <img src="{% static 'webpage/img/acdh_logo_black_03.png' %}" id="acdh-logo" alt="ACDH" title="Austrian Centre for Digital Humanities"/>
                 </a>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
+                all: {{ nr_all }}<br />
+                checked: {{ nr_checked }} <br />
+                cohen_kappa_score: {{ cks_str }}
+                fscore: {{ f1_str.2 }}
+            </div>
+            <div class="col-sm-4">
                 <a href="{% projects_metadata 'github' %}" class="navlink" target="_blank">
                     <img src="{% static 'webpage/img/GitHub-Mark-64px.png' %}" id="github-logo" alt="{{ metadata.github }}" title="Github source code"/>
                 </a>

@@ -76,6 +76,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'webpage.webpage_content_processors.installed_apps',
+                'annotations.annotations_content_processors.annotation_scores',
             ],
         },
     },

@@ -37,3 +37,5 @@ dev_secret.py
 /arche/data/fileType.json
 /arche/data/fileList.json
 pg_local.py
+anatol*.csv
+dump.sql

@@ -1,7 +1,9 @@
+import reversion
+
 from django.db import models
 from django.urls import reverse
 from django.contrib.postgres.fields import JSONField
-import reversion
+
 
 TAG = """
 <mark class="entity" style="background: {}; padding: 0.45em 0.6em; color: white;
@@ -42,6 +44,17 @@ class NerSample(models.Model):
 
     def __str__(self):
         return self.text
+
+    def save(self, *args, **kwargs):
+        if self.entity_checked is not None:
+            ent_dict = self.entity_checked
+            cleaned_dict = []
+            for x in ent_dict['entities']:
+                clean = [int(x[0]), int(x[1]), x[2]]
+                cleaned_dict.append(clean)
+            ent_dict['entities'] = cleaned_dict
+            self.entity_checked = ent_dict
+        super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse(

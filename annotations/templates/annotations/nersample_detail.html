@@ -181,7 +181,7 @@
         {% endif %}
 
         $.ajax({
-            url: "{{ object.get_api_url}}",
+            url: "{{ object.get_api_url }}",
             type: 'PUT',
             data: JSON.stringify({entity_checked: final}),
             headers: {

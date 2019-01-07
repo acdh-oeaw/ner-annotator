@@ -11,5 +11,6 @@ PROJECT_METADATA = {
     'purpose_en': 'This app should ease the process of creating gold standards for Named Entities.',
     'version': '0.0.1',
     'matomo_id': '91',
-    'matomo_url': '//matomo.acdh.oeaw.ac.at/'
+    'matomo_url': '//matomo.acdh.oeaw.ac.at/',
+    'app_type': 'tool',
 }

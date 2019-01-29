@@ -1,9 +1,10 @@
-import reversion
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 from django.db import models
 from django.urls import reverse
 from django.contrib.postgres.fields import JSONField
-
+import reversion
 
 TAG = """
 <mark class="entity" style="background: {}; padding: 0.45em 0.6em; color: white;
@@ -21,7 +22,9 @@ TAG_COLORS = {
     "PER": '#007bff',
     "LOC": '#5a6268',
     "ORG": "#28a745",
-    "MISC": '#17a2b8'
+    "MISC": '#17a2b8',
+    "OBJECT": '#5a6268',
+    "FALSE": '#5a6268'
 }
 
 
@@ -38,6 +41,9 @@ class NerSample(models.Model):
         blank=True, null=True, verbose_name="Corrected Annotation",
         help_text="Corrected Annotation"
     )
+    content_type = models.ForeignKey(ContentType, blank=True, null=True, on_delete=models.SET_NULL)
+    object_id = models.PositiveIntegerField(blank=True, null=True)
+    content_object = GenericForeignKey('content_type', 'object_id')
 
     class Meta:
         ordering = ['id']
@@ -119,3 +125,12 @@ class NerSample(models.Model):
                 }
             )
         return sents
+
+    def return_ents(self):
+        ents = []
+        for x in self.make_html_samples():
+            if x['start'] is None:
+                pass
+            else:
+                ents.append(x['sent'][x['start']:x['end']])
+        return ents

@@ -13,8 +13,8 @@
     {% if object.entity_checked %}
         <h1>CHECKED</h1>
     {% endif %}
-    <div class="card procustom-panel-create">
-        <div class="card-header procustom-panel-heading">
+    <div class="card">
+        <div class="card-header">
             <div class="row">
                 <div class="col-md-2">
                     {% if object.get_prev %}
@@ -81,6 +81,7 @@
                                         <select class="form-control" name="ent_type-{{ forloop.counter0 }}" id="ent_type-{{ forloop.counter0 }}">
                                             <option value="{{ x.ent }}" selected>{{ x.ent }}</option>
                                             <option value="PER">PER</option>
+                                            <option value="OBJECT">OBJECT</option>
                                             <option value="LOC">LOC</option>
                                             <option value="ORG">ORG</option>
                                             <option value="MISC">MISC</option>
@@ -132,6 +133,15 @@
         <!--change history ends here-->
     </div>
 </div>
+
+</div>
+<div class="card">
+    <div class="card-header">
+        <h3>related objects</h3>
+    </div>
+    <div class="card-body">
+        <a href="{{ object.content_object.get_absolute_url }}">{{ object.content_object }}</a>
+    </div>
 </div>
 <script>
     $('code').mouseup(function() {
@@ -174,14 +184,14 @@
             }
         });
 
-        {% if object.get_next %}
+        {% if next_filtered %}
             var next_url = "{% url 'annotations:nersample_detail' pk=next_filtered %}"
         {% else %}
             var next_url = false;
         {% endif %}
 
         $.ajax({
-            url: "{{ object.get_api_url }}",
+            url: "{{ object.get_api_url}}",
             type: 'PUT',
             data: JSON.stringify({entity_checked: final}),
             headers: {

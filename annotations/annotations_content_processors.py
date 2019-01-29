@@ -21,7 +21,10 @@ def annotation_scores(request):
         df = pd.DataFrame(list(samples), columns=['id', 'text', 'checked', 'guess'])
         df['entities_checked'] = df.apply(lambda x: x['checked']['entities'], axis=1)
         df['entities_guess'] = df.apply(lambda x: x['guess']['entities'], axis=1)
-        df['entities_checked_str'] = df.apply(lambda x: "{}".format(x['checked']['entities']), axis=1)
+        df['entities_checked_str'] = df.apply(
+            lambda x: "{}".format(x['checked']['entities']),
+            axis=1
+        )
         df['entities_guess_str'] = df.apply(lambda x: "{}".format(x['guess']['entities']), axis=1)
         df['entities_checked_count'] = df.apply(lambda x: len(x['checked']['entities']), axis=1)
         df['entities_guess_count'] = df.apply(lambda x: len(x['guess']['entities']), axis=1)
@@ -36,8 +39,9 @@ def annotation_scores(request):
         results['f1_count'] = precision_recall_fscore_support(y_true, y_pred, average='micro')
         results['cks_count'] = cohen_kappa_score(y_true, y_pred)
 
-    return results
-
-
-def installed_apps(request):
-    return {'APPS': settings.INSTALLED_APPS}
+        return results
+    else:
+        return {
+            "f1_count": "No samples created yet",
+            "cks_count": "No samples created yet"
+        }

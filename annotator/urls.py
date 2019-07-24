@@ -10,7 +10,7 @@ if 'bib' in settings.INSTALLED_APPS:
 
 router = routers.DefaultRouter()
 router.register(r'nersample', NerSampleViewSet)
-router.register(r'nersampletodo', NerSampleViewSet)
+router.register(r'nersampletodo', NerSampleViewSetToDo)
 
 if 'bib' in settings.INSTALLED_APPS:
     router.register(r'zotitems', ZotItemViewSet)

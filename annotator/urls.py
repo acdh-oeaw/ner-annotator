@@ -3,13 +3,14 @@ from django.contrib import admin
 from django.conf import settings
 from rest_framework import routers
 
-from annotations.api_views import NerSampleViewSet
+from annotations.api_views import NerSampleViewSet, NerSampleViewSetToDo
 
 if 'bib' in settings.INSTALLED_APPS:
     from bib.api_views import ZotItemViewSet
 
 router = routers.DefaultRouter()
 router.register(r'nersample', NerSampleViewSet)
+router.register(r'nersampletodo', NerSampleViewSet)
 
 if 'bib' in settings.INSTALLED_APPS:
     router.register(r'zotitems', ZotItemViewSet)

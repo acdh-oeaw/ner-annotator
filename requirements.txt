@@ -12,7 +12,7 @@ django-filter==2.0.0
 django-rest-framework==0.1.0
 django-reversion==3.0.0
 django-tables2==1.21.2
-djangorestframework==3.8.2
+djangorestframework==3.11.2
 entrypoints==0.2.3
 html5lib==1.0.1
 idna==2.8
